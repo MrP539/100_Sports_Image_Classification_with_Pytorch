@@ -1,3 +1,5 @@
+#conda environment : Machine_learning_AI_builders
+
 import sklearn.metrics
 import torch.utils
 import torch.utils.data
@@ -9,6 +11,7 @@ import sklearn
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+
 
 if torch.cuda.is_available(): gpu = True
 
@@ -64,7 +67,7 @@ model.fc = torch.nn.Linear(in_features=2048,out_features=len(train_set.classes))
 if gpu: model.cuda()
 
 loss_function = torch.nn.CrossEntropyLoss()
-optimizer = torch.optim.SGD(model.parameters(), lr=1e-2)
+optimizer = torch.optim.Adam(model.parameters(), lr=1e-2)
 
 # pre csv logger
 
@@ -72,9 +75,10 @@ columns = ["epoch","train_loss","valid_loss","accuracy","f1_score"]
 csv_df = pd.DataFrame(columns=columns)
 csv_file_name = "result_log.csv" 
 log_csv_path = os.path.join(loot_path,csv_file_name)
+model_name = "model.pth"
 # # Train model
 
-n_epochs = 50
+n_epochs = 1
 bast_val_loss = float("inf")
 
 for epoch in range(n_epochs):
@@ -127,11 +131,11 @@ for epoch in range(n_epochs):
 
     if valid_loss < bast_val_loss:
         bast_val_loss = valid_loss
-        model_path = os.path.join(loot_path,"model.pth")
+        model_path = os.path.join(loot_path,model_name)
         torch.save(model.state_dict(),model_path)
         print(f"***** Save Complete ******")
 
-model_path = os.path.join(loot_path,"model.pth")
+model_path = os.path.join(loot_path,model_name)
 best_model = torchvision.models.resnet50(weights=None)
 best_model.fc = torch.nn.Linear(in_features=2048,out_features=len(train_set.classes))
 state_dict = torch.load(model_path)

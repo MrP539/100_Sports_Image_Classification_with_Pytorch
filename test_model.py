@@ -8,7 +8,7 @@ import cv2
 if torch.cuda.is_available():
     gpu = True
 
-img_path_cv2 = "test4.jpg"
+img_path_cv2 = "test.png"
 
 test_set_path = os.path.join("data","test")
 test_set = torchvision.datasets.ImageFolder(test_set_path)
@@ -31,7 +31,7 @@ if gpu:
 model = torchvision.models.resnet50(weights = None)
 model.fc = torch.nn.Linear(in_features=2048,out_features=len(test_set.classes))
 
-model_path = os.path.join("model.pth")
+model_path = os.path.join("model","pretrain_resnet50_optimazer(SGD)","model.pth")
 state_dic = torch.load(model_path)
 model.load_state_dict(state_dict=state_dic)
 
